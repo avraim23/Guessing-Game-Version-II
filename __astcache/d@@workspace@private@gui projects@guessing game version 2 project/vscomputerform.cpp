@@ -1,0 +1,65 @@
+﻿//---------------------------------------------------------------------------
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include <fmx.h>
+#pragma hdrstop
+
+#include "VsComputerForm.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma resource "*.fmx"
+TMyVsComputerForm *MyVsComputerForm;
+//--------------------------------------------------------------------------
+int random_number() {
+	srand(time(NULL));
+	return rand() % 10 + 1;
+}
+int guessedNumber ;
+int attempsNumbers = 0 ;
+int randomNumber = random_number() ; ;
+//---------------------------------------------------------------------------
+__fastcall TMyVsComputerForm::TMyVsComputerForm(TComponent* Owner)
+	: TForm(Owner)
+{
+}
+//---------------------------------------------------------------------------
+void __fastcall TMyVsComputerForm::ConfirmButtonClick(TObject *Sender)
+{
+
+	WrongAttempsLabel->Text = "Wrong Attemps" ;
+	NumberOfAttemps->Text = attempsNumbers ;
+	guessedNumber = NumbersEdit->Text.ToInt() ;
+	if (guessedNumber == randomNumber )
+	{
+		MessageLabel->Text = "YOU WON ! CONGRATULATIONS !" ;
+		ConfirmButton->Enabled = false ;
+	}
+	else if (guessedNumber > randomNumber)
+	{
+		MessageLabel->Text = "Too Big Number" ;
+		attempsNumbers++;
+		NumberOfAttemps->Text = attempsNumbers ;
+	}
+	else if (guessedNumber < randomNumber)
+	{
+		MessageLabel->Text = "Too Small Number" ;
+		attempsNumbers++;
+		NumberOfAttemps->Text = attempsNumbers ;
+	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMyVsComputerForm::FormClose(TObject *Sender, TCloseAction &Action)
+
+{
+	ConfirmButton->Enabled = true ;
+	MessageLabel->Text = "" ;
+	NumberOfAttemps->Text = "" ;
+	NumbersEdit->Text = "" ;
+	attempsNumbers = 0 ;
+	WrongAttempsLabel->Text = "" ;
+	randomNumber = random_number() ;
+}
+//---------------------------------------------------------------------------
+
